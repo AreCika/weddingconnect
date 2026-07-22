@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { getGuestPageData } from "../../../lib/weddings";
+import { getWeddingPageData } from "@/lib/weddings";
 import { Hero } from "@/components/sections/hero";
 import { WeddingDetails } from "@/components/sections/wedding-details";
 import { RsvpSection } from "@/components/sections/rsvp-section";
 
 type PageProps = {
-  params: Promise<{ guestToken: string }>;
+  params: Promise<{ weddingToken: string }>;
 };
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { guestToken } = await params;
-  const { wedding } = await getGuestPageData(guestToken);
+  const { weddingToken } = await params;
+  const wedding = await getWeddingPageData(weddingToken);
 
   const title = `${wedding.bride_name} & ${wedding.groom_name}`;
   const description =
@@ -26,8 +26,8 @@ export async function generateMetadata({
 }
 
 export default async function GuestWeddingPage({ params }: PageProps) {
-  const { guestToken } = await params;
-  const { guest, wedding } = await getGuestPageData(guestToken);
+  const { weddingToken } = await params;
+  const wedding = await getWeddingPageData(weddingToken);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -41,7 +41,7 @@ export default async function GuestWeddingPage({ params }: PageProps) {
         venueName={wedding.venue_name}
         venueAddress={wedding.venue_address}
       />
-      <RsvpSection guestName={guest.name} currentStatus={guest.rsvp_status} />
+      <RsvpSection weddingId={wedding.id} />
     </main>
   );
 }
