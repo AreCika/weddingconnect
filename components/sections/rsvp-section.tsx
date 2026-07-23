@@ -6,23 +6,42 @@ import { Heart, HeartCrack } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionDivider } from "@/components/decor/ornaments";
+import { submitRsvp, type RsvpFormState } from "@/lib/actions/rsvp";
 
 type RsvpSectionProps = {
   weddingId: string;
 };
 
-// Form UI only for now — actual submission (writing to the database) is
-// Phase 7's job. The hidden weddingId field is already here because
-// Phase 7's Server Action will need it to know which wedding this RSVP
-// belongs to.
 export function RsvpSection({ weddingId }: RsvpSectionProps) {
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [attending, setAttending] = useState<"attending" | "not_attending" | null>(null);
   const [headcount, setHeadcount] = useState(1);
+  const [formState, setFormState] = useState<RsvpFormState>({ status: "idle" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!attending) return;
+
+    setIsSubmitting(true);
+    const result = await submitRsvp({ weddingId, name, phoneNumber, attending, headcount });
+    setFormState(result);
+    setIsSubmitting(false);
+  }
+
+  if (formState.status === "success") {
+    return (
+      <section className="relative px-6 py-20 text-center">
+        <Reveal>
+          <h2 className="font-script text-4xl text-primary">Thank You!</h2>
+          <SectionDivider className="mt-4" />
+          <p className="mx-auto mt-6 max-w-sm font-serif text-lg text-foreground">
+            Your RSVP has been recorded.
+          </p>
+        </Reveal>
+      </section>
+    );
   }
 
   return (
@@ -134,14 +153,16 @@ export function RsvpSection({ weddingId }: RsvpSectionProps) {
 
           <Button
             type="submit"
-            disabled
+            disabled={isSubmitting}
             className="mt-2 bg-primary text-primary-foreground"
           >
-            Submit RSVP
+            {isSubmitting ? "Submitting..." : "Submit RSVP"}
           </Button>
-          <p className="text-center text-xs text-muted-foreground">
-            RSVP submission is wired up in Phase 7.
-          </p>
+          {formState.status === "error" && (
+            <p className="text-center text-xs text-destructive">
+              {formState.message}
+            </p>
+          )}
         </form>
       </Reveal>
     </section>

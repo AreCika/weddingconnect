@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getWeddingPageData } from "@/lib/weddings";
+import { getWeddingPageData, getWishes } from "@/lib/weddings";
 import { GuestExperience } from "@/components/guest-experience";
 
 type PageProps = {
@@ -26,6 +26,7 @@ export async function generateMetadata({
 export default async function GuestWeddingPage({ params }: PageProps) {
   const { weddingToken } = await params;
   const wedding = await getWeddingPageData(weddingToken);
+  const wishes = await getWishes(wedding.id);
 
-  return <GuestExperience wedding={wedding} />;
+  return <GuestExperience wedding={wedding} wishes={wishes} />;
 }

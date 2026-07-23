@@ -40,3 +40,33 @@ export const getWeddingPageData = cache(
     return data;
   }
 );
+
+export type Wish = {
+  id: string;
+  guest_name: string;
+  message: string;
+  created_at: string;
+};
+
+/**
+ * Fetches the wish wall for a wedding, newest first. Unlike the wedding
+ * lookup above, a fetch failure here shouldn't 404 the whole page — the
+ * wall is a nice-to-have, not the trust boundary — so it just logs and
+ * returns an empty list.
+ */
+export const getWishes = cache(async (weddingId: string): Promise<Wish[]> => {
+  const supabase = createAdminClient();
+
+  const { data, error } = await supabase
+    .from("wishes")
+    .select("id, guest_name, message, created_at")
+    .eq("wedding_id", weddingId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Failed to fetch wishes:", error);
+    return [];
+  }
+
+  return data;
+});

@@ -20,13 +20,6 @@ export function WeddingDetails({
     year: "numeric",
   });
 
-  const mapsHref =
-    venueName || venueAddress
-      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-          [venueName, venueAddress].filter(Boolean).join(", ")
-        )}`
-      : null;
-
   return (
     <section className="relative border-y border-border bg-muted/40 px-6 py-20 text-center">
       <Reveal>
@@ -55,16 +48,6 @@ export function WeddingDetails({
               <dd className="font-serif text-lg text-foreground">{venueName}</dd>
               {venueAddress && (
                 <dd className="text-sm text-muted-foreground">{venueAddress}</dd>
-              )}
-              {mapsHref && (
-                <a
-                  href={mapsHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-1 text-xs font-medium uppercase tracking-wide text-primary underline-offset-4 hover:underline"
-                >
-                  Get Directions
-                </a>
               )}
             </div>
           </Reveal>
