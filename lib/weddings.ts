@@ -70,3 +70,41 @@ export const getWishes = cache(async (weddingId: string): Promise<Wish[]> => {
 
   return data;
 });
+
+/**
+ * Resolves the couple's private read-only dashboard by dashboard_access_token.
+ * Same trust model as the guest page — no login, the token itself (checked
+ * here in trusted server code) is the access control, so this uses the
+ * service-role client rather than an admin session.
+ *
+ * Unlike the guest page, this deliberately does NOT 404 on an archived
+ * wedding: archiving only retires the public guest-facing page, it was
+ * never meant to cut the couple off from their own final numbers.
+ */
+export const getDashboardData = cache(async (dashboardToken: string) => {
+  const supabase = createAdminClient();
+
+  const { data: wedding, error } = await supabase
+    .from("weddings")
+    .select("id, bride_name, groom_name, wedding_date, venue_name, venue_address, status")
+    .eq("dashboard_access_token", dashboardToken)
+    .single();
+
+  if (error || !wedding) {
+    notFound();
+  }
+
+  const { data: guests } = await supabase
+    .from("guests")
+    .select("name, phone_number, rsvp_status, headcount, responded_at")
+    .eq("wedding_id", wedding.id)
+    .order("responded_at", { ascending: false });
+
+  const { data: wishes } = await supabase
+    .from("wishes")
+    .select("guest_name, message, created_at")
+    .eq("wedding_id", wedding.id)
+    .order("created_at", { ascending: false });
+
+  return { wedding, guests: guests ?? [], wishes: wishes ?? [] };
+});
