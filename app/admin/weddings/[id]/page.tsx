@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import { archiveWedding } from "@/lib/actions/admin-weddings";
+import { archiveWedding, unarchiveWedding } from "@/lib/actions/admin-weddings";
 
 export default async function ManageWeddingPage({
   params,
@@ -19,15 +19,22 @@ export default async function ManageWeddingPage({
   const attending = guests?.filter((g) => g.rsvp_status === "attending") ?? [];
   const totalHeadcount = attending.reduce((sum, g) => sum + g.headcount, 0);
   const archiveWithId = archiveWedding.bind(null, id);
+  const unarchiveWithId = unarchiveWedding.bind(null, id);
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">{wedding?.bride_name} & {wedding?.groom_name}</h1>
-        {wedding?.status !== "archived" && (
+        {wedding?.status !== "archived" ? (
           <form action={archiveWithId}>
             <button type="submit" className="text-sm text-muted-foreground underline">
               Archive Wedding
+            </button>
+          </form>
+        ) : (
+          <form action={unarchiveWithId}>
+            <button type="submit" className="text-sm text-muted-foreground underline">
+              Unarchive Wedding
             </button>
           </form>
         )}

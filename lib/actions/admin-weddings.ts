@@ -78,3 +78,17 @@ export async function archiveWedding(weddingId: string) {
 
   redirect("/admin");
 }
+
+export async function unarchiveWedding(weddingId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("weddings")
+    .update({ status: "active", archived_at: null })
+    .eq("id", weddingId);
+
+  if (error) {
+    throw new Error("Failed to unarchive wedding.");
+  }
+
+  redirect("/admin");
+}
