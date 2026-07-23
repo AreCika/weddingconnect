@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { CornerFlourish, HibiscusIcon } from "@/components/decor/ornaments";
 import { FloatingPetals } from "@/components/decor/floating-petals";
+import { Fireflies } from "@/components/decor/fireflies";
 import { Countdown } from "@/components/shared/countdown";
 
 type HeroProps = {
@@ -23,6 +24,7 @@ export function Hero({ brideName, groomName, weddingDate }: HeroProps) {
     <section className="relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-6 py-24 text-center">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,_var(--secondary)_0%,_var(--background)_65%)]" />
       <FloatingPetals />
+      <Fireflies />
 
       <CornerFlourish className="absolute left-4 top-4 size-16 rotate-0 text-primary/50 sm:left-8 sm:top-8 sm:size-24" />
       <CornerFlourish className="absolute right-4 top-4 size-16 -scale-x-100 text-primary/50 sm:right-8 sm:top-8 sm:size-24" />

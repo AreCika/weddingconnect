@@ -32,7 +32,7 @@ export function RsvpSection({ weddingId }: RsvpSectionProps) {
 
   if (formState.status === "success") {
     return (
-      <section className="relative px-6 py-20 text-center">
+      <section id="rsvp" className="relative px-6 py-20 text-center">
         <Reveal>
           <h2 className="font-script text-4xl text-primary">Thank You!</h2>
           <SectionDivider className="mt-4" />
@@ -45,7 +45,7 @@ export function RsvpSection({ weddingId }: RsvpSectionProps) {
   }
 
   return (
-    <section className="relative px-6 py-20 text-center">
+    <section id="rsvp" className="relative px-6 py-20 text-center">
       <Reveal>
         <h2 className="font-script text-4xl text-primary">
           Will You Be Joining Us?

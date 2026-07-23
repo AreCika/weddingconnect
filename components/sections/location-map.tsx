@@ -14,7 +14,7 @@ export function LocationMap({ venueName, venueAddress }: LocationMapProps) {
   const directionsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 
   return (
-    <section className="px-6 py-16 text-center">
+    <section id="location" className="px-6 py-16 text-center">
       <Reveal>
         <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-primary/20 shadow-sm">
           <iframe

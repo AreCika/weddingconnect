@@ -2,13 +2,15 @@
 
 import { useRef } from "react";
 import { InvitationGate } from "@/components/guest/invitation-gate";
-import { MusicPlayer, type MusicPlayerHandle } from "@/components/audio/music-player";
+import { BottomNav } from "@/components/guest/bottom-nav";
+import { useMusicPlayer } from "@/components/audio/music-player";
 import { Hero } from "@/components/sections/hero";
 import { CoupleIntro } from "@/components/sections/couple-intro";
 import { Gallery } from "@/components/sections/gallery";
 import { WeddingDetails } from "@/components/sections/wedding-details";
 import { LocationMap } from "@/components/sections/location-map";
 import { Timeline } from "@/components/sections/timeline";
+import { Contact } from "@/components/sections/contact";
 import { RsvpSection } from "@/components/sections/rsvp-section";
 import { Wishes } from "@/components/sections/wishes";
 import { Closing } from "@/components/sections/closing";
@@ -26,17 +28,18 @@ export function GuestExperience({
   wedding: WeddingPageData;
   wishes: Wish[];
 }) {
-  const musicRef = useRef<MusicPlayerHandle>(null);
   const musicUrl = getMusicUrl(wedding.content);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const music = useMusicPlayer(audioRef, musicUrl);
 
   return (
-    <main className="relative min-h-screen bg-background font-serif text-foreground">
+    <main className="relative min-h-screen bg-background pb-20 font-serif text-foreground">
       <InvitationGate
         brideName={wedding.bride_name}
         groomName={wedding.groom_name}
-        onOpen={() => musicRef.current?.play()}
+        onOpen={music.play}
       />
-      <MusicPlayer ref={musicRef} src={musicUrl} />
+      <audio ref={audioRef} src={music.src} loop preload="none" onError={music.onError} />
 
       <Hero
         brideName={wedding.bride_name}
@@ -59,9 +62,16 @@ export function GuestExperience({
         venueAddress={wedding.venue_address}
       />
       <Timeline content={wedding.content} />
+      <Contact content={wedding.content} />
       <RsvpSection weddingId={wedding.id} />
       <Wishes weddingId={wedding.id} wishes={wishes} />
       <Closing brideName={wedding.bride_name} groomName={wedding.groom_name} />
+
+      <BottomNav
+        musicPlaying={music.playing}
+        musicUnavailable={music.unavailable}
+        onToggleMusic={music.toggle}
+      />
     </main>
   );
 }
