@@ -13,12 +13,7 @@ type WishInput = {
   message: string;
 };
 
-/**
- * Posts a wish to the wall. No moderation step by design (V1 scope) — the
- * message is visible to every guest as soon as this succeeds. Runs
- * server-side with the admin client for the same reason as submitRsvp:
- * there's no authenticated guest, so this validation is the trust boundary.
- */
+/** No moderation (V1 scope) — visible immediately. Same trust boundary as submitRsvp: no authenticated guest, so this validation is what's enforced. */
 export async function submitWish(input: WishInput): Promise<WishFormState> {
   const guestName = input.guestName.trim();
   const message = input.message.trim();

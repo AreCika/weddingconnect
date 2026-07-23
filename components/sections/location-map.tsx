@@ -5,11 +5,7 @@ type LocationMapProps = {
   venueAddress: string | null;
 };
 
-/**
- * Purely the visual map — the venue name/address are already shown in
- * Wedding Details above. No API key needed: Google's Maps Embed works as a
- * plain query iframe for the basic (non-interactive-directions) case.
- */
+/** Just the map — venue name/address are already shown in Wedding Details above; no API key needed for Google's basic embed. */
 export function LocationMap({ venueName, venueAddress }: LocationMapProps) {
   if (!venueName && !venueAddress) return null;
 

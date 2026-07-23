@@ -16,19 +16,11 @@ export type MusicPlayerHandle = {
 };
 
 type MusicPlayerProps = {
-  /**
-   * Path to the background track, e.g. "/audio/background-music.mp3" or a
-   * couple-supplied URL from the wedding's `content.music_url`. If the file
-   * is missing, playback fails silently and the toggle stays visible but inert.
-   */
+  /** Track URL, e.g. a wedding's `content.music_url`; missing file fails silently. */
   src?: string;
 };
 
-/**
- * Floating background-music control. Autoplay is blocked by browsers until a
- * user gesture, so `play()` is only ever invoked from the invitation gate's
- * click handler — this component itself never calls play() on mount.
- */
+/** Floating music toggle. play() only runs from the gate's click handler — browsers block autoplay otherwise. */
 export const MusicPlayer = forwardRef<MusicPlayerHandle, MusicPlayerProps>(
   function MusicPlayer({ src = "/audio/background-music.mp3" }, ref) {
     const audioRef = useRef<HTMLAudioElement>(null);

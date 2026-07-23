@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getWeddingPageData, getWishes } from "@/lib/weddings";
-import { GuestExperience } from "@/components/guest-experience";
+import { GuestExperience } from "@/components/guest/guest-experience";
 
 type PageProps = {
   params: Promise<{ weddingToken: string }>;

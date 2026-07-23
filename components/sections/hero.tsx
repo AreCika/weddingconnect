@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { CornerFlourish, HibiscusIcon } from "@/components/decor/ornaments";
 import { FloatingPetals } from "@/components/decor/floating-petals";
-import { Countdown } from "@/components/countdown";
+import { Countdown } from "@/components/shared/countdown";
 
 type HeroProps = {
   brideName: string;

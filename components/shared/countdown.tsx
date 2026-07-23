@@ -30,16 +30,14 @@ export function Countdown({ weddingDate }: { weddingDate: string }) {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
-    // Intentional: syncs client wall-clock time on mount, which the server
-    // can't know in advance — this is the hydration-safe initial-value case.
+    // Intentional: syncs client wall-clock time, which the server can't know in advance.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTimeLeft(getTimeLeft(weddingDate));
     const id = setInterval(() => setTimeLeft(getTimeLeft(weddingDate)), 1000);
     return () => clearInterval(id);
   }, [weddingDate]);
 
-  // Render nothing on the server / first paint to avoid a hydration mismatch
-  // between server time and client time.
+  // Renders nothing until mounted, avoiding a server/client time hydration mismatch.
   if (!timeLeft) return null;
 
   return (

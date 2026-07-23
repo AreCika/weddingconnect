@@ -24,11 +24,7 @@ function PetalShape({ className }: { className?: string }) {
   );
 }
 
-/**
- * Slow-falling hibiscus/frangipani petals across the hero. Count is kept low
- * and motion respects prefers-reduced-motion via the `motion-reduce` variant
- * fallback (framer-motion still renders end state instantly for those users).
- */
+/** Slow-falling petals behind the hero; respects prefers-reduced-motion. */
 export function FloatingPetals({ count = 14 }: { count?: number }) {
   const petals = useMemo<Petal[]>(
     () =>

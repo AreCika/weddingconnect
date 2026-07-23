@@ -70,8 +70,7 @@ export function Gallery({ content }: GalleryProps) {
               onClick={(e) => e.stopPropagation()}
               className="relative"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- intrinsic
-                  size is unknown here, unlike the fixed-aspect grid thumbnails */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- unknown intrinsic size, unlike the grid thumbnails */}
               <img
                 src={selected}
                 alt=""

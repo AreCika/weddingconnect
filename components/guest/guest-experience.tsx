@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { InvitationGate } from "@/components/invitation-gate";
+import { InvitationGate } from "@/components/guest/invitation-gate";
 import { MusicPlayer, type MusicPlayerHandle } from "@/components/audio/music-player";
 import { Hero } from "@/components/sections/hero";
 import { CoupleIntro } from "@/components/sections/couple-intro";

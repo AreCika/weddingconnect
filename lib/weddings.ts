@@ -13,13 +13,12 @@ export type WeddingPageData = {
 };
 
 /**
- * Resolves the public wedding page by the wedding's shared guest_access_token.
- * Unlike the earlier per-guest version, this no longer resolves a specific
- * guest — guests aren't known until they submit the RSVP form themselves.
+ * Resolves the public wedding page by guest_access_token — guests aren't
+ * known until they submit the RSVP form, so there's no per-guest lookup.
  *
- * Uses the service-role client for the same reason as before: there's no
- * logged-in user on this route, so the token itself (verified here, in
- * trusted server code) is the access control.
+ * Uses the service-role client: there's no logged-in user on this route,
+ * so the token itself (verified here, in trusted server code) is the
+ * access control, not RLS.
  */
 export const getWeddingPageData = cache(
   async (weddingToken: string): Promise<WeddingPageData> => {
@@ -49,10 +48,9 @@ export type Wish = {
 };
 
 /**
- * Fetches the wish wall for a wedding, newest first. Unlike the wedding
- * lookup above, a fetch failure here shouldn't 404 the whole page — the
- * wall is a nice-to-have, not the trust boundary — so it just logs and
- * returns an empty list.
+ * Wish wall, newest first. Unlike the lookup above, a fetch failure here
+ * shouldn't 404 the whole page — it's a nice-to-have, not the trust
+ * boundary — so it just logs and returns an empty list.
  */
 export const getWishes = cache(async (weddingId: string): Promise<Wish[]> => {
   const supabase = createAdminClient();
@@ -72,14 +70,12 @@ export const getWishes = cache(async (weddingId: string): Promise<Wish[]> => {
 });
 
 /**
- * Resolves the couple's private read-only dashboard by dashboard_access_token.
- * Same trust model as the guest page — no login, the token itself (checked
- * here in trusted server code) is the access control, so this uses the
- * service-role client rather than an admin session.
+ * Resolves the couple's private dashboard by dashboard_access_token — same
+ * no-login, token-as-access-control model as the guest page, so it also
+ * uses the service-role client.
  *
- * Unlike the guest page, this deliberately does NOT 404 on an archived
- * wedding: archiving only retires the public guest-facing page, it was
- * never meant to cut the couple off from their own final numbers.
+ * Deliberately doesn't 404 on an archived wedding: archiving only retires
+ * the public guest page, not the couple's own access to their final numbers.
  */
 export const getDashboardData = cache(async (dashboardToken: string) => {
   const supabase = createAdminClient();

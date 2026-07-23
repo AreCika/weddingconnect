@@ -23,8 +23,7 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // getClaims() validates the JWT signature directly — safer than trusting
-  // a cookie's mere presence, which can be spoofed.
+  // getClaims() verifies the JWT signature — safer than trusting cookie presence alone.
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims;
 

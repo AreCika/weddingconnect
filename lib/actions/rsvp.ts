@@ -15,16 +15,10 @@ type RsvpInput = {
   headcount: number;
 };
 
-/**
- * Submits or updates a guest's RSVP. Runs entirely server-side using the
- * admin client — same reasoning as the read path: there's no authenticated
- * guest, so this function itself, not RLS, is the trust boundary. Every
- * input is re-validated here, independent of whatever the form already
- * checked, because client-side validation can always be bypassed.
- */
+/** Server-side trust boundary (not RLS) — there's no authenticated guest, so every input is re-validated here regardless of client-side checks. */
 export async function submitRsvp(input: RsvpInput): Promise<RsvpFormState> {
   const name = input.name.trim();
-  const phoneNumber = input.phoneNumber.replace(/\D/g, ""); // digits only
+  const phoneNumber = input.phoneNumber.replace(/\D/g, "");
 
   if (name.length < 1 || name.length > 100) {
     return { status: "error", message: "Please enter your name." };

@@ -18,8 +18,7 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             );
           } catch {
-            // Called from a Server Component — safe to ignore since the
-            // proxy handles refreshing the session instead.
+            // No-op from a Server Component — the proxy already refreshes the session.
           }
         },
       },

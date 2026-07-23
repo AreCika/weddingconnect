@@ -15,11 +15,7 @@ function initial(name: string) {
   return name.trim().charAt(0).toUpperCase();
 }
 
-/**
- * Cover screen guests see first, modelled on the "tap to open" gate common
- * to Malaysian e-invites. It also doubles as the user gesture that unlocks
- * background-music autoplay, which browsers otherwise block.
- */
+/** "Tap to open" cover screen (a Malaysian e-invite convention); its click also unlocks background-music autoplay, which browsers otherwise block. */
 export function InvitationGate({ brideName, groomName, onOpen }: InvitationGateProps) {
   const [open, setOpen] = useState(false);
 
