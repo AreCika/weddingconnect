@@ -32,7 +32,6 @@ export const getWeddingPageData = cache(
       )
       .eq("guest_access_token", weddingToken)
       .single();
-    
 
     if (error || !data || data.status === "archived") {
       notFound();
