@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, CalendarPlus } from "lucide-react";
 import { CornerFlourish, HibiscusIcon } from "@/components/decor/ornaments";
 import { FloatingPetals } from "@/components/decor/floating-petals";
 import { Fireflies } from "@/components/decor/fireflies";
@@ -11,9 +11,10 @@ type HeroProps = {
   brideName: string;
   groomName: string;
   weddingDate: string;
+  weddingToken: string;
 };
 
-export function Hero({ brideName, groomName, weddingDate }: HeroProps) {
+export function Hero({ brideName, groomName, weddingDate, weddingToken }: HeroProps) {
   const formattedDate = new Date(weddingDate).toLocaleDateString("en-MY", {
     day: "numeric",
     month: "long",
@@ -87,6 +88,18 @@ export function Hero({ brideName, groomName, weddingDate }: HeroProps) {
       >
         <Countdown weddingDate={weddingDate} />
       </motion.div>
+
+      <motion.a
+        href={`/api/calendar/${weddingToken}`}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 1.4 }}
+        whileTap={{ scale: 0.96 }}
+        className="relative flex items-center gap-2 rounded-full border border-primary/40 px-5 py-2.5 font-serif text-sm text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+      >
+        <CalendarPlus className="size-4" />
+        Save the Date
+      </motion.a>
 
       <motion.div
         animate={{ y: [0, 8, 0] }}

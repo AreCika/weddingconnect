@@ -28,5 +28,5 @@ export default async function GuestWeddingPage({ params }: PageProps) {
   const wedding = await getWeddingPageData(weddingToken);
   const wishes = await getWishes(wedding.id);
 
-  return <GuestExperience wedding={wedding} wishes={wishes} />;
+  return <GuestExperience wedding={wedding} wishes={wishes} weddingToken={weddingToken} />;
 }

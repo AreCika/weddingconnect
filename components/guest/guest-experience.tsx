@@ -24,9 +24,11 @@ function getMusicUrl(content: Record<string, unknown>): string | undefined {
 export function GuestExperience({
   wedding,
   wishes,
+  weddingToken,
 }: {
   wedding: WeddingPageData;
   wishes: Wish[];
+  weddingToken: string;
 }) {
   const musicUrl = getMusicUrl(wedding.content);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -45,6 +47,7 @@ export function GuestExperience({
         brideName={wedding.bride_name}
         groomName={wedding.groom_name}
         weddingDate={wedding.wedding_date}
+        weddingToken={weddingToken}
       />
       <CoupleIntro
         brideName={wedding.bride_name}
