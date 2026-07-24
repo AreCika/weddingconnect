@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { InvitationGate } from "@/components/guest/invitation-gate";
 import { BottomNav } from "@/components/guest/bottom-nav";
+import { useAutoScroll } from "@/components/guest/auto-scroll";
 import { useMusicPlayer } from "@/components/audio/music-player";
 import { Hero } from "@/components/sections/hero";
 import { CoupleIntro } from "@/components/sections/couple-intro";
@@ -22,6 +23,10 @@ function getMusicUrl(content: Record<string, unknown>): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined;
 }
 
+// Slightly longer than the curtain's own 1.5s duration, so auto-scroll
+// doesn't start while the gate is still covering the page.
+const GATE_ANIMATION_MS = 1600;
+
 export function GuestExperience({
   wedding,
   wishes,
@@ -34,13 +39,26 @@ export function GuestExperience({
   const musicUrl = getMusicUrl(wedding.content);
   const audioRef = useRef<HTMLAudioElement>(null);
   const music = useMusicPlayer(audioRef, musicUrl);
+  const autoScroll = useAutoScroll();
+  const gateTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (gateTimeoutRef.current) clearTimeout(gateTimeoutRef.current);
+    };
+  }, []);
+
+  function handleGateOpen() {
+    music.play();
+    gateTimeoutRef.current = setTimeout(autoScroll.start, GATE_ANIMATION_MS);
+  }
 
   return (
     <main className="relative min-h-screen bg-background pb-20 font-serif text-foreground">
       <InvitationGate
         brideName={wedding.bride_name}
         groomName={wedding.groom_name}
-        onOpen={music.play}
+        onOpen={handleGateOpen}
       />
       <audio ref={audioRef} src={music.src} loop preload="none" onError={music.onError} />
 

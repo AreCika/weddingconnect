@@ -71,13 +71,13 @@ export function InvitationGate({ brideName, groomName, onOpen }: InvitationGateP
 
               <div className="flex flex-col gap-2">
                 <p className="font-serif text-xs uppercase tracking-[0.4em] text-muted-foreground">
-                  Together With Family
+                  Together with their families
                 </p>
                 <h1 className="font-script text-4xl text-primary sm:text-5xl">
                   {brideName} &amp; {groomName}
                 </h1>
                 <p className="font-serif text-sm text-muted-foreground">
-                  request the pleasure of your company
+                  Invite you to celebrate their wedding
                 </p>
               </div>
 
