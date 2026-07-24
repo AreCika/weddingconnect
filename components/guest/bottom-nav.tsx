@@ -62,12 +62,11 @@ export function BottomNav({ musicPlaying, musicUnavailable, onToggleMusic }: Bot
           </motion.span>
         </button>
 
-        {/* Gift/QR — placeholder slot, content shape not decided yet */}
         <button
           type="button"
-          disabled
-          aria-label="Gift (coming soon)"
-          className="flex items-center justify-center p-2 text-muted-foreground/30"
+          onClick={() => scrollToId("gift")}
+          aria-label="Gift"
+          className="flex items-center justify-center p-2 text-muted-foreground transition-colors hover:text-primary"
         >
           <Gift className="size-5" />
         </button>

@@ -11,6 +11,7 @@ import { WeddingDetails } from "@/components/sections/wedding-details";
 import { LocationMap } from "@/components/sections/location-map";
 import { Timeline } from "@/components/sections/timeline";
 import { Contact } from "@/components/sections/contact";
+import { Gift } from "@/components/sections/gift";
 import { RsvpSection } from "@/components/sections/rsvp-section";
 import { Wishes } from "@/components/sections/wishes";
 import { Closing } from "@/components/sections/closing";
@@ -66,6 +67,7 @@ export function GuestExperience({
       />
       <Timeline content={wedding.content} />
       <Contact content={wedding.content} />
+      <Gift content={wedding.content} />
       <RsvpSection weddingId={wedding.id} />
       <Wishes weddingId={wedding.id} wishes={wishes} />
       <Closing brideName={wedding.bride_name} groomName={wedding.groom_name} />
