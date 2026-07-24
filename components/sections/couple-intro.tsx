@@ -1,26 +1,16 @@
 import { Reveal } from "@/components/ui/reveal";
 import { SectionDivider } from "@/components/decor/ornaments";
+import { readNestedContentString, type WeddingContent } from "@/lib/content";
 
 type CoupleIntroProps = {
   brideName: string;
   groomName: string;
-  content: Record<string, unknown>;
+  content: WeddingContent;
 };
 
-function readBio(content: Record<string, unknown>, person: "bride" | "groom"): string | null {
-  const couple = content.couple;
-  if (typeof couple !== "object" || couple === null) return null;
-
-  const entry = (couple as Record<string, unknown>)[person];
-  if (typeof entry !== "object" || entry === null) return null;
-
-  const bio = (entry as Record<string, unknown>).bio;
-  return typeof bio === "string" && bio.trim().length > 0 ? bio : null;
-}
-
 export function CoupleIntro({ brideName, groomName, content }: CoupleIntroProps) {
-  const brideBio = readBio(content, "bride");
-  const groomBio = readBio(content, "groom");
+  const brideBio = readNestedContentString(content, ["couple", "bride", "bio"], { trim: true });
+  const groomBio = readNestedContentString(content, ["couple", "groom", "bio"], { trim: true });
 
   if (!brideBio && !groomBio) return null;
 

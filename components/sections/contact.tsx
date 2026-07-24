@@ -1,33 +1,14 @@
 import { Phone, MessageCircle } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionDivider } from "@/components/decor/ornaments";
+import { readContentObjectArray, type WeddingContent } from "@/lib/content";
 
 type ContactProps = {
-  content: Record<string, unknown>;
+  content: WeddingContent;
 };
-
-type ContactEntry = {
-  name: string;
-  relation: string;
-  phone: string;
-};
-
-function readContacts(content: Record<string, unknown>): ContactEntry[] {
-  const raw = content.contacts;
-  if (!Array.isArray(raw)) return [];
-
-  const contacts: ContactEntry[] = [];
-  for (const item of raw) {
-    if (typeof item !== "object" || item === null) continue;
-    const { name, relation, phone } = item as Record<string, unknown>;
-    if (typeof name !== "string" || typeof relation !== "string" || typeof phone !== "string") continue;
-    contacts.push({ name, relation, phone });
-  }
-  return contacts;
-}
 
 export function Contact({ content }: ContactProps) {
-  const contacts = readContacts(content);
+  const contacts = readContentObjectArray(content, "contacts", ["name", "relation", "phone"] as const);
   if (contacts.length === 0) return null;
 
   return (

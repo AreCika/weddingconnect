@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import { InvitationGate } from "@/components/guest/invitation-gate";
 import { BottomNav } from "@/components/guest/bottom-nav";
-import { useAutoScroll } from "@/components/guest/auto-scroll";
-import { useMusicPlayer } from "@/components/audio/music-player";
+import { useAutoScroll } from "@/hooks/use-auto-scroll";
+import { useMusicPlayer } from "@/hooks/use-music-player";
 import { Hero } from "@/components/sections/hero";
 import { CoupleIntro } from "@/components/sections/couple-intro";
 import { Gallery } from "@/components/sections/gallery";
@@ -17,11 +17,7 @@ import { RsvpSection } from "@/components/sections/rsvp-section";
 import { Wishes } from "@/components/sections/wishes";
 import { Closing } from "@/components/sections/closing";
 import type { WeddingPageData, Wish } from "@/lib/weddings";
-
-function getMusicUrl(content: Record<string, unknown>): string | undefined {
-  const value = content.music_url;
-  return typeof value === "string" && value.length > 0 ? value : undefined;
-}
+import { readContentString } from "@/lib/content";
 
 // Slightly longer than the curtain's own 1.5s duration, so auto-scroll
 // doesn't start while the gate is still covering the page.
@@ -36,7 +32,7 @@ export function GuestExperience({
   wishes: Wish[];
   weddingToken: string;
 }) {
-  const musicUrl = getMusicUrl(wedding.content);
+  const musicUrl = readContentString(wedding.content, "music_url");
   const audioRef = useRef<HTMLAudioElement>(null);
   const music = useMusicPlayer(audioRef, musicUrl);
   const autoScroll = useAutoScroll();

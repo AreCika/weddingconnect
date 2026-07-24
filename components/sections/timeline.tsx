@@ -1,36 +1,18 @@
 import { Reveal } from "@/components/ui/reveal";
 import { SectionDivider } from "@/components/decor/ornaments";
+import { readContentObjectArray, type WeddingContent } from "@/lib/content";
 
 type TimelineProps = {
-  content: Record<string, unknown>;
+  content: WeddingContent;
 };
-
-type TimelineEvent = {
-  time: string;
-  title: string;
-  description: string;
-};
-
-function readTimeline(content: Record<string, unknown>): TimelineEvent[] {
-  const raw = content.timeline;
-  if (!Array.isArray(raw)) return [];
-
-  const events: TimelineEvent[] = [];
-  for (const item of raw) {
-    if (typeof item !== "object" || item === null) continue;
-    const { time, title, description } = item as Record<string, unknown>;
-    if (typeof time !== "string" || typeof title !== "string") continue;
-    events.push({
-      time,
-      title,
-      description: typeof description === "string" ? description : "",
-    });
-  }
-  return events;
-}
 
 export function Timeline({ content }: TimelineProps) {
-  const events = readTimeline(content);
+  const events = readContentObjectArray(
+    content,
+    "timeline",
+    ["time", "title"] as const,
+    ["description"] as const
+  );
   if (events.length === 0) return null;
 
   return (

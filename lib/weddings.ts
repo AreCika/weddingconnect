@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import type { WeddingContent } from "@/lib/content";
 
 export type WeddingPageData = {
   id: string;
@@ -9,7 +10,7 @@ export type WeddingPageData = {
   wedding_date: string;
   venue_name: string | null;
   venue_address: string | null;
-  content: Record<string, unknown>;
+  content: WeddingContent;
 };
 
 /**

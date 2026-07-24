@@ -15,6 +15,27 @@ Don't confuse the two: adding an RLS policy for guests would do nothing (service
 
 Early design considered generating one unique link per invited guest. Rejected in favor of one shared `guest_access_token` link per wedding (sent once, via WhatsApp) with guests entering their own name and phone number on the RSVP form. Phone number is a soft identity key — resubmitting with the same number updates the existing RSVP (`upsert` on `wedding_id, phone_number`) instead of creating a duplicate. This trades perfect guest-identity tracking for a much simpler send flow: the couple shares one link, not a spreadsheet of per-guest URLs.
 
+## Content-driven, self-hiding sections
+
+Every optional guest-page feature — couple bios, gallery, timeline, contacts,
+gift QR, background music — lives in one freeform `content` jsonb column on
+`weddings` rather than its own table or migration. Each section component
+(`components/sections/*`) reads its own slice defensively via shared helpers
+in `lib/content.ts` (`readContentString`, `readContentStringArray`,
+`readContentObjectArray`, etc.) and renders `null` if that data isn't set —
+so there's no "enable this section" toggle anywhere; a section simply
+appears once the admin populates its field. This keeps adding a new optional
+feature to a cheap, additive change (one reader function, one component) instead
+of a schema migration. The tradeoff: `content` is untyped at the database
+level, so every reader must independently guard against missing/malformed
+data — never trust its shape.
+
+Two hooks — `useMusicPlayer` and `useAutoScroll` — live in `hooks/` rather
+than inside a feature folder, because they own state used by more than one
+part of the guest-page shell (`components/guest/guest-experience.tsx` wires
+both into the invitation gate and the bottom nav) rather than belonging to a
+single component.
+
 ## Archival policy
 
 A wedding's `status` becomes `archived` at some point after the event. This only retires the **public guest-facing page** (`getWeddingPageData` 404s on archived) — it's about not hosting a stale RSVP page indefinitely, not about deleting or hiding data. The couple's dashboard (`getDashboardData`) deliberately does *not* 404 on archived weddings, since they should always be able to see their final numbers and wishes.

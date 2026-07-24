@@ -58,31 +58,3 @@ export function CornerFlourish({ className }: IconProps) {
     </svg>
   );
 }
-
-/** Subtle repeating diamond lattice, evocative of songket/batik border patterns. */
-export function LatticeBackground({ className }: IconProps) {
-  return (
-    <svg
-      className={className}
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <pattern
-          id="lattice"
-          width="56"
-          height="56"
-          patternUnits="userSpaceOnUse"
-        >
-          <path
-            d="M28 2 L54 28 L28 54 L2 28 Z"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#lattice)" />
-    </svg>
-  );
-}

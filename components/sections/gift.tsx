@@ -5,18 +5,14 @@ import Image from "next/image";
 import { Download } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionDivider } from "@/components/decor/ornaments";
+import { readContentString, type WeddingContent } from "@/lib/content";
 
 type GiftProps = {
-  content: Record<string, unknown>;
+  content: WeddingContent;
 };
 
-function readQrCodeUrl(content: Record<string, unknown>): string | null {
-  const value = content.qrCodeUrl;
-  return typeof value === "string" && value.length > 0 ? value : null;
-}
-
 export function Gift({ content }: GiftProps) {
-  const qrCodeUrl = readQrCodeUrl(content);
+  const qrCodeUrl = readContentString(content, "qrCodeUrl");
   const [isSaving, setIsSaving] = useState(false);
 
   if (!qrCodeUrl) return null;

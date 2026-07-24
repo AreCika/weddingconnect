@@ -7,18 +7,11 @@ import { X } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionDivider } from "@/components/decor/ornaments";
 import { cn } from "@/lib/utils";
+import { readContentStringArray, type WeddingContent } from "@/lib/content";
 
 type GalleryProps = {
-  content: Record<string, unknown>;
+  content: WeddingContent;
 };
-
-function readGallery(content: Record<string, unknown>): string[] {
-  const gallery = content.gallery;
-  if (!Array.isArray(gallery)) return [];
-  return gallery.filter(
-    (item): item is string => typeof item === "string" && item.length > 0
-  );
-}
 
 const AUTO_ADVANCE_MS = 4500;
 const SWIPE_THRESHOLD = 10000;
@@ -34,7 +27,7 @@ const slideVariants = {
 };
 
 export function Gallery({ content }: GalleryProps) {
-  const photos = readGallery(content);
+  const photos = readContentStringArray(content, "gallery");
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
