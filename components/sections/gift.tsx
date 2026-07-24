@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import { Download } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionDivider } from "@/components/decor/ornaments";
 
@@ -13,7 +17,40 @@ function readQrCodeUrl(content: Record<string, unknown>): string | null {
 
 export function Gift({ content }: GiftProps) {
   const qrCodeUrl = readQrCodeUrl(content);
+  const [isSaving, setIsSaving] = useState(false);
+
   if (!qrCodeUrl) return null;
+
+  // Narrowed to a plain `string` const so handleSave's closure (a separate
+  // function scope, which TS won't narrow across) sees a non-null type.
+  const url = qrCodeUrl;
+
+  async function handleSave() {
+    setIsSaving(true);
+    try {
+      // A plain <a download> gets ignored by browsers for cross-origin
+      // images (the Storage bucket is a different origin) — fetching the
+      // bytes ourselves and downloading from a blob URL works around that.
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("fetch failed");
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = "wedding-gift-qr.png";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(objectUrl);
+    } catch {
+      // CORS or network failure — fall back to opening the image directly
+      // so the guest can still save it via long-press / right-click.
+      window.open(url, "_blank");
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   return (
     <section id="gift" className="px-6 py-20 text-center">
@@ -34,6 +71,16 @@ export function Gift({ content }: GiftProps) {
             className="object-contain"
           />
         </div>
+
+        <button
+          type="button"
+          onClick={handleSave}
+          disabled={isSaving}
+          className="mt-4 inline-flex items-center gap-2 rounded-full border border-primary/40 px-5 py-2.5 font-serif text-sm text-primary transition-colors hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
+        >
+          <Download className="size-4" />
+          {isSaving ? "Saving..." : "Save QR Code"}
+        </button>
       </Reveal>
     </section>
   );
