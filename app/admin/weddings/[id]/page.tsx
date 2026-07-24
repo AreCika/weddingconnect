@@ -1,5 +1,8 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { archiveWedding, unarchiveWedding } from "@/lib/actions/admin-weddings";
+
+export const metadata: Metadata = { title: "Manage Wedding" };
 
 export default async function ManageWeddingPage({
   params,

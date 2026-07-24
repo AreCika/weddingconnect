@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { createWedding } from "@/lib/actions/admin-weddings";
+
+export const metadata: Metadata = { title: "New Wedding" };
 
 export default function NewWeddingPage() {
   return (

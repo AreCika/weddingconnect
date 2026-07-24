@@ -1,11 +1,13 @@
 # WeddingConnect
 
-A wedding invitation platform: each couple gets a shareable guest page at its
-own token URL — hero with countdown and calendar download, couple intro,
-photo gallery, wedding details, venue map, event timeline, contacts, a
-gift/QR section, RSVP, and a wishes wall — plus a private read-only dashboard
-for checking responses. An internal admin tool manages the list of weddings
-(create, edit, archive, guest list, CSV export).
+Codebase name for **KadJemput** (the browser-tab/product name) — a wedding
+invitation platform: each couple gets a shareable guest page at its own
+human-readable link (e.g. `siti-ahmad-a3f9c2d1`) — hero with countdown and
+calendar download, couple intro, photo gallery, wedding details, venue map,
+event timeline, contacts, a gift/QR section, RSVP, and a wishes wall — plus
+a private read-only dashboard for checking responses. An internal admin
+tool manages the list of weddings (create, edit, archive, guest list, CSV
+export).
 
 ## Stack
 

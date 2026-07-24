@@ -1,6 +1,8 @@
 "use server";
 
+import { randomBytes } from "crypto";
 import { createClient } from "@/lib/supabase/server";
+import { slugify } from "@/lib/utils";
 import { redirect } from "next/navigation";
 
 function parseWeddingFields(formData: FormData) {
@@ -24,6 +26,15 @@ export async function createWedding(formData: FormData) {
   const fields = parseWeddingFields(formData);
   const supabase = await createClient();
 
+  // Human-readable guest link (e.g. "siti-ahmad-a3f9c2d1") instead of the
+  // raw hex the DB column defaults to — this is the whole access control
+  // for the public guest page, so it still needs a random suffix, just a
+  // shorter and shareable one. dashboard_access_token is untouched: it
+  // stays pure random hex from the column default, it's the couple's
+  // private link, not meant to be shared casually.
+  const suffix = randomBytes(4).toString("hex"); // 8 hex chars, e.g. "a3f9c2d1"
+  const guestAccessToken = `${slugify(fields.brideName)}-${slugify(fields.groomName)}-${suffix}`;
+
   const { data, error } = await supabase
     .from("weddings")
     .insert({
@@ -32,6 +43,7 @@ export async function createWedding(formData: FormData) {
       wedding_date: fields.weddingDate,
       venue_name: fields.venueName,
       venue_address: fields.venueAddress,
+      guest_access_token: guestAccessToken,
     })
     .select()
     .single();

@@ -15,6 +15,8 @@ Don't confuse the two: adding an RLS policy for guests would do nothing (service
 
 Early design considered generating one unique link per invited guest. Rejected in favor of one shared `guest_access_token` link per wedding (sent once, via WhatsApp) with guests entering their own name and phone number on the RSVP form. Phone number is a soft identity key — resubmitting with the same number updates the existing RSVP (`upsert` on `wedding_id, phone_number`) instead of creating a duplicate. This trades perfect guest-identity tracking for a much simpler send flow: the couple shares one link, not a spreadsheet of per-guest URLs.
 
+Since this token *is* the entire access control for the public page, it still needs real randomness — but `createWedding()` builds it as `slugify(bride)-slugify(groom)-<8 hex chars>` (e.g. `siti-ahmad-a3f9c2d1`) instead of raw hex, so the link reads as something a guest will actually trust tapping. `dashboard_access_token` deliberately stays pure random hex from the DB column default — it's the couple's private link, not meant to be shared casually, so there's no readability tradeoff to make there.
+
 ## Content-driven, self-hiding sections
 
 Every optional guest-page feature — couple bios, gallery, timeline, contacts,
